@@ -1,0 +1,160 @@
+﻿@if (false) { <script src="../../Scripts/jquery-1.7.2-vsdoc.js" type="text/javascript"></script>}
+                                                                                                
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+    <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="#">iLikeIt!</a>
+        <div class="nav-collapse">
+        <ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- VGTODO Change it into the other direction and update href -->
+    <a href="#">
+        <img style="position: absolute; top: 0; left: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub" />
+    </a>
+    <br /><br />
+    <h1>iLikeIt!</h1>
+    <p>iLikeIt! is a simple, proof of concept, image voting system</p>
+
+    <div class="row">
+        <div class="span8 offset2">
+            <div id="myCarousel" class="carousel slide">             
+            <div class="carousel-inner">
+                <div class="active item"><img src="@Url.Content("~/Content/images/Carousel/img01.jpg")" alt="First image" /></div>                
+                <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img02.jpg")" alt="Second image" /></div>
+                <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img03.jpg")" alt="Third image" /></div>
+                <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img04.jpg")" alt="Fourth image" /></div>
+                <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img05.jpg")" alt="Fifth image" /></div>
+                <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img06.jpg")" alt="Sixth image" /></div>
+                <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img07.jpg")" alt="Seventh image" /></div>                            
+            </div>             
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+            </div>
+         </div>
+
+         <div id="voting-div">
+            <div></div>
+        </div>
+     </div>
+
+     
+
+</div> <!-- /container -->
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="@Url.Content("~/Scripts/jquery-1.7.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/bootstrap.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/knockout-2.1.0.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    var viewModel;
+
+    //This prototype is provided by the Mozilla foundation and
+    //is distributed under the MIT license.
+    //http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
+
+    if (!Array.prototype.indexOf) {
+        Array.prototype.indexOf = function (elt /*, from*/) {
+            var len = this.length;
+
+            var from = Number(arguments[1]) || 0;
+            from = (from < 0)
+         ? Math.ceil(from)
+         : Math.floor(from);
+            if (from < 0)
+                from += len;
+
+            for (; from < len; from++) {
+                if (from in this &&
+          this[from] === elt)
+                    return from;
+            }
+            return -1;
+        };
+    }
+
+    function Right(str, n) {
+        if (n <= 0) {
+            return "";
+        }
+        else if (n > String(str).length) {
+            return str;
+        }
+        else {
+            var iLen = String(str).length;
+            return String(str).substring(iLen, iLen - n);
+        }
+    }
+
+    function getInternetExplorerVersion()
+    // Returns the version of Internet Explorer or a -1
+    // (indicating the use of another browser).
+    {
+        var rv = -1; // Return value assumes failure.
+        if (navigator.appName == 'Microsoft Internet Explorer') {
+            var ua = navigator.userAgent;
+            var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+            if (re.exec(ua) != null)
+                rv = parseFloat(RegExp.$1);
+        }
+        return rv;
+    }
+
+    $(function () {
+        viewModel = {            
+            votedImages: ko.observableArray([]),
+            activeImage: ko.observable('Carousel/img01.gif')
+        };
+        ko.applyBindings(viewModel);
+
+        $('#myCarousel').carousel({
+            interval: false,
+            pause: "hover"
+        });
+        $("#myCarousel").carousel('pause');
+
+        $("#myCarousel").on("slide", function (type, next) {
+            var image = next.children[0];
+            var src = image.getAttribute("src");
+            /* Hack for IE8 or previous versions */
+            if (getInternetExplorerVersion() > -1 && getInternetExplorerVersion() < 9) {
+                src = Right(src, 12);
+            }
+            viewModel.activeImage(src);
+            return true;
+        });
+
+        /* VGTODO Transform this into the click link for the voting control
+        $("#btn-submit").on("click", function () {
+            $.ajax({
+                type: 'POST',
+                url: 'Home/Vote',
+                data: '{"votedImages":"' + viewModel.votedImages() + '"}',
+                contentType: "application/json; charset=utf-8",
+                success: function (msg) {                    
+                    
+                },
+                error: function () {
+                    alert("We experienced a techincal issue. Please try again and if the problem persists... well it's just a proof of concept app, what did you expect?");
+                    return false;
+                }
+            });
+        });*/
+    });
+
+</script>
