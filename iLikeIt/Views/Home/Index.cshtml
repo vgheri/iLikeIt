@@ -46,11 +46,11 @@
             <div class="center carousel-vote">
                 Vote
                 <div class="star-container">
-                    <div class="vote-item"><img id="1-star" src="@Url.Content("~/Content/images/empty_star.png")" alt="1" /></div>
-                    <div class="vote-item"><img id="2-star" src="@Url.Content("~/Content/images/empty_star.png")" alt="2" /></div>
-                    <div class="vote-item"><img id="3-star" src="@Url.Content("~/Content/images/empty_star.png")" alt="3" /></div>
-                    <div class="vote-item"><img id="4-star" src="@Url.Content("~/Content/images/empty_star.png")" alt="4" /></div>
-                    <div class="vote-item"><img id="5-star" src="@Url.Content("~/Content/images/empty_star.png")" alt="5" /></div>
+                    <div class="vote-item"><img id="1" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="1" /></div>
+                    <div class="vote-item"><img id="2" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="2" /></div>
+                    <div class="vote-item"><img id="3" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="3" /></div>
+                    <div class="vote-item"><img id="4" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="4" /></div>
+                    <div class="vote-item"><img id="5" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="5" /></div>
                 </div>
             </div>
             </div>
@@ -118,8 +118,42 @@
         return rv;
     }
 
+    /*
+     * Show the user its rating by coloring (mouse over) or uncoloring (mouse out) the stars
+     */
+    function displayRating(selectedId, mouseIn) {
+        var activeImage = $(".active img");
+        if (activeImage.data("vote") === null || activeImage.data("vote") === undefined) {
+            var divs = $(".star-container div").slice(0, parseInt(selectedId)).each(function (item) {
+                if (mouseIn) {
+                    $(this).find("img").attr("src", '@Url.Content("~/Content/images/full_star.png")');
+                }
+                else {
+                    $(this).find("img").attr("src", '@Url.Content("~/Content/images/empty_star.png")');
+                }
+            });
+        }/*
+        else {
+            var id = activeImage.data("vote");
+            var divs = $(".star-container div").slice(0, parseInt(id)).each(function (item) {
+                if (mouseIn) {
+                    $(this).find("img").attr("src", '@Url.Content("~/Content/images/full_star.png")');
+                }
+                else {
+                    $(this).find("img").attr("src", '@Url.Content("~/Content/images/empty_star.png")');
+                }
+            });
+        }*/
+    }
+
+    function registerVote(star) {
+        var votedImage = $(".active img");
+        votedImage.data("vote", star.attr("id"));
+        //alert("You voted image " + votedImage.attr("src") + " " + star.attr("id") + " star(s). Your vote is registered");
+    }
+
     $(function () {
-        viewModel = {            
+        viewModel = {
             votedImages: ko.observableArray([]),
             activeImage: ko.observable('Carousel/img01.gif')
         };
@@ -142,21 +176,36 @@
             return true;
         });
 
+        $(".vote-item").on("mouseover", "img", function () {
+            var elem = $(this);
+            displayRating(elem.attr("id"), true);
+        });
+
+        $(".vote-item").on("mouseout", "img", function () {
+            var elem = $(this);
+            displayRating(elem.attr("id"), false);
+        });
+
+        $(".vote-item").on("click", "img", function () {
+            var elem = $(this);
+            registerVote(elem);
+        });
+
         /* VGTODO Transform this into the click link for the voting control
         $("#btn-submit").on("click", function () {
-            $.ajax({
-                type: 'POST',
-                url: 'Home/Vote',
-                data: '{"votedImages":"' + viewModel.votedImages() + '"}',
-                contentType: "application/json; charset=utf-8",
-                success: function (msg) {                    
+        $.ajax({
+        type: 'POST',
+        url: 'Home/Vote',
+        data: '{"votedImages":"' + viewModel.votedImages() + '"}',
+        contentType: "application/json; charset=utf-8",
+        success: function (msg) {                    
                     
-                },
-                error: function () {
-                    alert("We experienced a techincal issue. Please try again and if the problem persists... well it's just a proof of concept app, what did you expect?");
-                    return false;
-                }
-            });
+        },
+        error: function () {
+        alert("We experienced a techincal issue. Please try again and if the problem persists... well it's just a proof of concept app, what did you expect?");
+        return false;
+        }
+        });
         });*/
     });
 
