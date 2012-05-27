@@ -21,30 +21,29 @@
 </div>-->
 
 <div class="container">
-    <!-- VGTODO Change it into the other direction and update href -->
-    <a href="#">
-        <img style="position: absolute; top: 0; left: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub" />
-    </a>
-    <br /><br />
+    <!-- VGTODO Change it into the other direction and update href -->        
     <h1>iLikeIt!</h1>
     <p>iLikeIt! is a simple, proof of concept, image voting system</p>
-
+    <a href="#">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" />
+    </a>
     <div class="row">
         <div class="span8 offset2">
             <div id="myCarousel" class="carousel slide">             
             <div class="carousel-inner">
-                <div class="active item"><img src="@Url.Content("~/Content/images/Carousel/img01.jpg")" alt="First image" /></div>                
+                <div class="active item"><img src="@Url.Content("~/Content/images/Carousel/img01.jpg")" alt="First image" /></div> 
                 <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img02.jpg")" alt="Second image" /></div>
                 <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img03.jpg")" alt="Third image" /></div>
                 <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img04.jpg")" alt="Fourth image" /></div>
                 <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img05.jpg")" alt="Fifth image" /></div>
                 <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img06.jpg")" alt="Sixth image" /></div>
-                <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img07.jpg")" alt="Seventh image" /></div>                            
+                <div class="item"><img src="@Url.Content("~/Content/images/Carousel/img07.jpg")" alt="Seventh image" /></div>
             </div>             
             <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>            
             <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>            
             <div class="center carousel-vote">
                 Vote
+                <span class="star-text"></span>
                 <div class="star-container">
                     <div class="vote-item"><img id="1" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="1" /></div>
                     <div class="vote-item"><img id="2" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="2" /></div>
@@ -52,6 +51,7 @@
                     <div class="vote-item"><img id="4" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="4" /></div>
                     <div class="vote-item"><img id="5" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="5" /></div>
                 </div>
+                
             </div>
             </div>
          </div>
@@ -91,19 +91,6 @@
         };
     }
 
-    function Right(str, n) {
-        if (n <= 0) {
-            return "";
-        }
-        else if (n > String(str).length) {
-            return str;
-        }
-        else {
-            var iLen = String(str).length;
-            return String(str).substring(iLen, iLen - n);
-        }
-    }
-
     function getInternetExplorerVersion()
     // Returns the version of Internet Explorer or a -1
     // (indicating the use of another browser).
@@ -118,6 +105,31 @@
         return rv;
     }
 
+    function getStarShortTextDescription(starId) {
+        var description;
+        switch (starId) {
+            case "1":
+                description = "Awful";
+                break;
+            case "2":
+                description = "Nothing special";
+                break;
+            case "3":
+                description = "Not bad";
+                break;
+            case "4":
+                description = "Nice";
+                break;
+            case "5":
+                description = "I like it!";
+                break;
+            default:
+                description = "Unknown rate";
+                break;
+        }
+        return description;
+    }
+
     /*
      * Show the user its rating by coloring (mouse over) or uncoloring (mouse out) the stars
      */
@@ -126,30 +138,49 @@
         if (activeImage.data("vote") === null || activeImage.data("vote") === undefined) {
             var divs = $(".star-container div").slice(0, parseInt(selectedId)).each(function (item) {
                 if (mouseIn) {
-                    $(this).find("img").attr("src", '@Url.Content("~/Content/images/full_star.png")');
+                    $(this).find("img").attr("src", '@Url.Content("~/Content/images/full_star.png")');                    
                 }
                 else {
-                    $(this).find("img").attr("src", '@Url.Content("~/Content/images/empty_star.png")');
+                    $(this).find("img").attr("src", '@Url.Content("~/Content/images/empty_star.png")');                    
                 }
             });
-        }/*
+            if (mouseIn) {
+                $(".star-text").text(getStarShortTextDescription(selectedId));
+            }
+            else {
+                $(".star-text").text("");
+            }
+        }
+    }
+
+    function resetStarContainer() {
+        var divs = $(".star-container div").slice(0, 5).each(function (item) {
+            $(this).find("img").attr("src", '@Url.Content("~/Content/images/empty_star.png")');
+        });
+        $(".star-text").text("");
+    }
+
+    function preloadRating() {
+        var activeImage = $(".active img");
+        var vote = activeImage.data("vote");
+        resetStarContainer();
+        if (vote != null && vote != undefined) {
+            var divs = $(".star-container div").slice(0, parseInt(vote)).each(function (item) {
+                $(this).find("img").attr("src", '@Url.Content("~/Content/images/full_star.png")');
+            });
+            $(".star-text").text(getStarShortTextDescription(vote));
+        }
         else {
-            var id = activeImage.data("vote");
-            var divs = $(".star-container div").slice(0, parseInt(id)).each(function (item) {
-                if (mouseIn) {
-                    $(this).find("img").attr("src", '@Url.Content("~/Content/images/full_star.png")');
-                }
-                else {
-                    $(this).find("img").attr("src", '@Url.Content("~/Content/images/empty_star.png")');
-                }
-            });
-        }*/
+            
+        }
+        return true;
     }
 
     function registerVote(star) {
         var votedImage = $(".active img");
         votedImage.data("vote", star.attr("id"));
         //alert("You voted image " + votedImage.attr("src") + " " + star.attr("id") + " star(s). Your vote is registered");
+        /* VGTODO Call the server to register the vote. Get the average and display the average in the callback */
     }
 
     $(function () {
@@ -174,6 +205,10 @@
             }
             viewModel.activeImage(src);
             return true;
+        });
+
+        $(".carousel-vote").on("mouseenter", function () {
+            preloadRating();
         });
 
         $(".vote-item").on("mouseover", "img", function () {
