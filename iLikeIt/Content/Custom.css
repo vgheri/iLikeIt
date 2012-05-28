@@ -77,14 +77,19 @@
 	top: 40px;
 	left: 38px;
 }
+
 .vote-item {
 	float:left;
 	padding-right: 5px;
 }
 
+.vote-item:hover {
+	cursor: pointer;
+}
+
 .star-text 
 {
-    position: absolute;
-    left: 33%;
-    bottom: 3px;
+	position: absolute;
+	left: 33%;
+	bottom: 3px;
 }

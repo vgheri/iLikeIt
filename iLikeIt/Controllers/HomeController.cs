@@ -17,14 +17,16 @@ namespace iLikeIt.Controllers
         }
 
         [HttpPost]
-        public void Vote(string votedImages)
+        public JsonResult RegisterVote(string votedImage, string rating)
         {
-            var images = new List<string>();
-            string[] split = votedImages.Split(',');
-            foreach (var src in split)
+            /* Simulates some kind of computation */
+            for (var i = 0; i < 100000000; i++)
             {
-                images.Add(src);
-            }
+                var temp = 125677 * i;
+            }   
+                         
+            Random random = new Random();
+            return Json(random.Next(1, 5).ToString());            
         }   
     }
 }

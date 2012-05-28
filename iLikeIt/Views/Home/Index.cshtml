@@ -1,24 +1,4 @@
 ﻿@if (false) { <script src="../../Scripts/jquery-1.7.2-vsdoc.js" type="text/javascript"></script>}
-                                                                                                
-<!--<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-    <div class="container">
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        </a>
-        <a class="brand" href="#">iLikeIt!</a>
-        <div class="nav-collapse">
-        <ul class="nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-        </div>
-    </div>
-    </div>
-</div>-->
 
 <div class="container">
     <!-- VGTODO Change it into the other direction and update href -->        
@@ -42,7 +22,7 @@
             <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>            
             <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>            
             <div class="center carousel-vote">
-                Vote
+                <span class="carousel-vote-title">Vote</span>
                 <span class="star-text"></span>
                 <div class="star-container">
                     <div class="vote-item"><img id="1" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="1" /></div>
@@ -65,12 +45,10 @@
 <script src="@Url.Content("~/Scripts/bootstrap.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/knockout-2.1.0.js")" type="text/javascript"></script>
 <script type="text/javascript">
-    var viewModel;
-
+    
     //This prototype is provided by the Mozilla foundation and
     //is distributed under the MIT license.
     //http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
-
     if (!Array.prototype.indexOf) {
         Array.prototype.indexOf = function (elt /*, from*/) {
             var len = this.length;
@@ -91,20 +69,23 @@
         };
     }
 
-    function getInternetExplorerVersion()
-    // Returns the version of Internet Explorer or a -1
-    // (indicating the use of another browser).
-    {
+    /*
+     * Returns the version of Internet Explorer or a -1 (indicating the use of another browser)
+     */
+    function getInternetExplorerVersion() {
         var rv = -1; // Return value assumes failure.
         if (navigator.appName == 'Microsoft Internet Explorer') {
             var ua = navigator.userAgent;
             var re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
             if (re.exec(ua) != null)
-                rv = parseFloat(RegExp.$1);
+            rv = parseFloat(RegExp.$1);
         }
         return rv;
     }
 
+    /* 
+    * Get a text representation of the vote cast by the user
+    */
     function getStarShortTextDescription(starId) {
         var description;
         switch (starId) {
@@ -124,7 +105,7 @@
                 description = "I like it!";
                 break;
             default:
-                description = "Unknown rate";
+                description = "Unknown rate";                
                 break;
         }
         return description;
@@ -153,13 +134,20 @@
         }
     }
 
+    /*
+     * Reset the vote panel
+     */
     function resetStarContainer() {
         var divs = $(".star-container div").slice(0, 5).each(function (item) {
             $(this).find("img").attr("src", '@Url.Content("~/Content/images/empty_star.png")');
         });
+        $(".carousel-vote-title").text("Vote");
         $(".star-text").text("");
     }
 
+    /* 
+     * Preload the vote panel with the vote already cast by the user, if any.
+     */
     function preloadRating() {
         var activeImage = $(".active img");
         var vote = activeImage.data("vote");
@@ -168,45 +156,47 @@
             var divs = $(".star-container div").slice(0, parseInt(vote)).each(function (item) {
                 $(this).find("img").attr("src", '@Url.Content("~/Content/images/full_star.png")');
             });
+            $(".carousel-vote-title").text("Average rating");
             $(".star-text").text(getStarShortTextDescription(vote));
-        }
-        else {
-            
-        }
+        }        
         return true;
     }
 
+    /* 
+     *  Register the vote cast by the user submitting it to the server.
+     *  On success, we display the average rating.
+     *  On error, we display an alert to the user and reset the vote panel
+     */
     function registerVote(star) {
         var votedImage = $(".active img");
-        votedImage.data("vote", star.attr("id"));
-        //alert("You voted image " + votedImage.attr("src") + " " + star.attr("id") + " star(s). Your vote is registered");
-        /* VGTODO Call the server to register the vote. Get the average and display the average in the callback */
+        // If the user didn't vote yet, then we can register the vote
+        if (votedImage.data("vote") === null || votedImage.data("vote") === undefined) {
+            $(".carousel-vote-title").text("Submitting your vote...");
+            $.ajax({
+                type: 'POST',
+                url: 'Home/RegisterVote',
+                data: '{"imageName":"' + votedImage.src + '", "star":"' + star.attr("id") + '"}',
+                contentType: "application/json; charset=utf-8",
+                success: function (msg) {
+                    votedImage.data("vote", msg);
+                    preloadRating();
+                },
+                error: function () {
+                    alert("Ooops, an error has occurred. Please try again and if the problem persists... well it's just a proof of concept app, what did you expect?");
+                    resetStarContainer();
+                    return false;
+                }
+            });
+        }
     }
 
-    $(function () {
-        viewModel = {
-            votedImages: ko.observableArray([]),
-            activeImage: ko.observable('Carousel/img01.gif')
-        };
-        ko.applyBindings(viewModel);
-
+    $(function () {        
         $('#myCarousel').carousel({
             interval: false,
             pause: "hover"
         });
         $("#myCarousel").carousel('pause');
-
-        $("#myCarousel").on("slide", function (type, next) {
-            var image = next.children[0];
-            var src = image.getAttribute("src");
-            /* Hack for IE8 or previous versions */
-            if (getInternetExplorerVersion() > -1 && getInternetExplorerVersion() < 9) {
-                src = Right(src, 12);
-            }
-            viewModel.activeImage(src);
-            return true;
-        });
-
+                
         $(".carousel-vote").on("mouseenter", function () {
             preloadRating();
         });
@@ -225,23 +215,6 @@
             var elem = $(this);
             registerVote(elem);
         });
-
-        /* VGTODO Transform this into the click link for the voting control
-        $("#btn-submit").on("click", function () {
-        $.ajax({
-        type: 'POST',
-        url: 'Home/Vote',
-        data: '{"votedImages":"' + viewModel.votedImages() + '"}',
-        contentType: "application/json; charset=utf-8",
-        success: function (msg) {                    
-                    
-        },
-        error: function () {
-        alert("We experienced a techincal issue. Please try again and if the problem persists... well it's just a proof of concept app, what did you expect?");
-        return false;
-        }
-        });
-        });*/
     });
 
 </script>
