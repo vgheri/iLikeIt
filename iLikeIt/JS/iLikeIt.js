@@ -1,5 +1,5 @@
 ﻿//iLikeIt v0.1.0 | (c) 2012 Valerio Gheri | http://www.opensource.org/licenses/mit-license
-var iLikeIt = (function ($) {
+/*var iLikeIt = */(function ($) {
     /* 
     * Get a text representation of the vote cast by the user
     */
@@ -107,12 +107,33 @@ var iLikeIt = (function ($) {
         }
     }
 
-    function init() {
-        $('#myCarousel').carousel({
+    function createVotingDiv() {
+        var votingDiv = '<div class="center carousel-vote">';
+        votingDiv += '<span class="carousel-vote-title">Vote</span>';
+        votingDiv += '<span class="star-text"></span>';
+        votingDiv += '<div class="star-container">';
+        votingDiv += '<div class="vote-item"><img id="1" class="star" src="/Content/images/empty_star.png")" alt="1" /></div>';
+        votingDiv += '<div class="vote-item"><img id="2" class="star" src="/Content/images/empty_star.png")" alt="2" /></div>';
+        votingDiv += '<div class="vote-item"><img id="3" class="star" src="/Content/images/empty_star.png")" alt="3" /></div>';
+        votingDiv += '<div class="vote-item"><img id="4" class="star" src="/Content/images/empty_star.png")" alt="4" /></div>';
+        votingDiv += '<div class="vote-item"><img id="5" class="star" src="/Content/images/empty_star.png")" alt="5" /></div>';
+        votingDiv += '</div></div>';
+        return votingDiv;
+    }
+
+    $.fn.iLikeIt = function () {
+
+        var div = createVotingDiv();
+
+        var element = $(this);
+        element.append(div);
+        //$("#myCarousel").append(div);
+
+        element.carousel({
             interval: false,
             pause: "hover"
         });
-        $("#myCarousel").carousel('pause');
+        element.carousel('pause');
 
         $(".carousel-vote").on("mouseenter", function () {
             preloadRating();
@@ -132,13 +153,7 @@ var iLikeIt = (function ($) {
             var elem = $(this);
             registerVote(elem);
         });
-    }
-    
-    return {
-        PublicPrototype : {
-            init: function () {
-                init();
-            }
-        }
+
+        return this; //allow chaining
     }
 } (jQuery));

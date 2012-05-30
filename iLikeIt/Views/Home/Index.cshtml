@@ -14,29 +14,17 @@
     <div class="row">
         <div class="span8 offset2">
             <div id="myCarousel" class="carousel slide">             
-            <div class="carousel-inner">
-                <div class="active item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img01.jpg" alt="First image" /></div> 
-                <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img02.jpg" alt="Second image" /></div>
-                <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img03.jpg" alt="Third image" /></div>
-                <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img04.jpg" alt="Fourth image" /></div>
-                <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img05.jpg" alt="Fifth image" /></div>
-                <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img06.jpg" alt="Sixth image" /></div>
-                <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img07.jpg" alt="Seventh image" /></div>
-            </div>             
-            <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>            
-            <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>            
-            <div class="center carousel-vote">
-                <span class="carousel-vote-title">Vote</span>
-                <span class="star-text"></span>
-                <div class="star-container">
-                    <div class="vote-item"><img id="1" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="1" /></div>
-                    <div class="vote-item"><img id="2" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="2" /></div>
-                    <div class="vote-item"><img id="3" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="3" /></div>
-                    <div class="vote-item"><img id="4" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="4" /></div>
-                    <div class="vote-item"><img id="5" class="star" src="@Url.Content("~/Content/images/empty_star.png")" alt="5" /></div>
-                </div>
-                
-            </div>
+                <div class="carousel-inner">
+                    <div class="active item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img01.jpg" alt="First image" /></div> 
+                    <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img02.jpg" alt="Second image" /></div>
+                    <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img03.jpg" alt="Third image" /></div>
+                    <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img04.jpg" alt="Fourth image" /></div>
+                    <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img05.jpg" alt="Fifth image" /></div>
+                    <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img06.jpg" alt="Sixth image" /></div>
+                    <div class="item"><img src="http://dl.dropbox.com/u/6326953/iLikeIt/img07.jpg" alt="Seventh image" /></div>
+                </div>             
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>            
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>                        
             </div>
          </div>
      </div>
@@ -75,6 +63,6 @@
     }
 
     $(function () {
-        iLikeIt.PublicPrototype.init();
+        $("#myCarousel").iLikeIt();
     });
 </script>
