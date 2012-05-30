@@ -1,4 +1,5 @@
-﻿var iLikeIt = (function ($) {
+﻿//iLikeIt v0.1.0 | (c) 2012 Valerio Gheri | http://www.opensource.org/licenses/mit-license
+var iLikeIt = (function ($) {
     /* 
     * Get a text representation of the vote cast by the user
     */
