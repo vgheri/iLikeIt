@@ -6,10 +6,13 @@
 
 <div class="container">           
     <h1>iLikeIt!</h1>
-    <p>iLikeIt! is a simple, proof of concept, image voting system</p>
+    <br />
+    <h3>iLikeIt! is a simple, proof of concept, image voting system</h3>
+    <h3>To vote, simply mouse over an image and click on the star you think better fits the image</h3>
     <a href="https://github.com/vgheri/iLikeIt">
         <img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" />
     </a>
+    <br />
     <div class="row">
         <div class="span8 offset2">
             <div id="myCarousel" class="carousel slide">             
@@ -38,29 +41,6 @@
 <script src="@Url.Content("~/JS/iLikeIt.js")" type="text/javascript"></script>
 <script type="text/javascript">
     
-    //This prototype is provided by the Mozilla foundation and
-    //is distributed under the MIT license.
-    //http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
-    if (!Array.prototype.indexOf) {
-        Array.prototype.indexOf = function (elt /*, from*/) {
-            var len = this.length;
-
-            var from = Number(arguments[1]) || 0;
-            from = (from < 0)
-         ? Math.ceil(from)
-         : Math.floor(from);
-            if (from < 0)
-                from += len;
-
-            for (; from < len; from++) {
-                if (from in this &&
-          this[from] === elt)
-                    return from;
-            }
-            return -1;
-        };
-    }
-
     $(function () {
         var options = {
             postUrl : "/Home/RegisterVote"

@@ -29,25 +29,15 @@
     }
 
     /*
-    * Show the user its rating by coloring (mouse over) or uncoloring (mouse out) the stars
+    * Show the user its rating by coloring the stars
     */
     function displayRating(selectedId, mouseIn) {
         var activeImage = $(".active img");
         if (activeImage.data("vote") === null || activeImage.data("vote") === undefined) {
-            var divs = $(".star-container div").slice(0, parseInt(selectedId)).each(function (item) {
-                if (mouseIn) {
-                    $(this).find("img").attr("src", '/Content/images/full_star.png');
-                }
-                else {
-                    $(this).find("img").attr("src", '/Content/images/empty_star.png');
-                }
-            });
-            if (mouseIn) {
-                $(".star-text").text(getStarShortTextDescription(selectedId));
-            }
-            else {
-                $(".star-text").text("");
-            }
+            var divs = $(".star-container div").slice(0, parseInt(selectedId)).each(function (item) {                
+                    $(this).find("img").attr("src", '/Content/images/full_star.png');                
+            });            
+            $(".star-text").text(getStarShortTextDescription(selectedId));            
         }
     }
 
@@ -85,7 +75,7 @@
     *  On error, we display an alert to the user and reset the vote panel
     */
     function registerVote(star, postUrl) {
-        var votedImage = $(".active img");        
+        var votedImage = $(".active img");
         // If the user didn't vote yet, then we can register the vote
         if (votedImage.data("vote") === null || votedImage.data("vote") === undefined) {
             $(".carousel-vote-title").text("Submitting your vote...");
@@ -126,7 +116,7 @@
         var div = createVotingDiv();
         // element is the carousel 
         var element = $(this);
-        element.append(div);        
+        element.append(div);
 
         element.carousel({
             interval: false,
@@ -145,7 +135,8 @@
 
         $(".vote-item").on("mouseout", "img", function () {
             var elem = $(this);
-            displayRating(elem.attr("id"), false);
+            //displayRating(elem.attr("id"), false);
+            resetStarContainer();
         });
 
         $(".vote-item").on("click", "img", function () {
