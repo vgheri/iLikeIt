@@ -84,14 +84,14 @@
     *  On success, we display the average rating.
     *  On error, we display an alert to the user and reset the vote panel
     */
-    function registerVote(star) {
+    function registerVote(star, postUrl) {
         var votedImage = $(".active img");        
         // If the user didn't vote yet, then we can register the vote
         if (votedImage.data("vote") === null || votedImage.data("vote") === undefined) {
             $(".carousel-vote-title").text("Submitting your vote...");
             $.ajax({
                 type: 'POST',
-                url: 'Home/RegisterVote',
+                url: postUrl,
                 data: '{"imageId":"' + votedImage.attr("id") + '", "rating":"' + star.attr("id") + '"}',
                 contentType: "application/json; charset=utf-8",
                 success: function (msg) {
@@ -121,7 +121,7 @@
         return votingDiv;
     }
 
-    $.fn.iLikeIt = function () {
+    $.fn.iLikeIt = function (options) {
 
         var div = createVotingDiv();
 
@@ -151,7 +151,7 @@
 
         $(".vote-item").on("click", "img", function () {
             var elem = $(this);
-            registerVote(elem);
+            registerVote(elem, options.postUrl);
         });
 
         return this; //allow chaining

@@ -63,6 +63,9 @@
     }
 
     $(function () {
-        $("#myCarousel").iLikeIt();
+        var options = {
+            postUrl : "/Home/RegisterVote"
+        }
+        $("#myCarousel").iLikeIt(options);
     });
 </script>
