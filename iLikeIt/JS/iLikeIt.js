@@ -34,10 +34,10 @@
     function displayRating(selectedId, mouseIn) {
         var activeImage = $(".active img");
         if (activeImage.data("vote") === null || activeImage.data("vote") === undefined) {
-            var divs = $(".star-container div").slice(0, parseInt(selectedId)).each(function (item) {                
-                    $(this).find("img").attr("src", '/Content/images/full_star.png');                
-            });            
-            $(".star-text").text(getStarShortTextDescription(selectedId));            
+            var divs = $(".star-container div").slice(0, parseInt(selectedId)).each(function (item) {
+                $(this).find("img").attr("src", '/Content/images/full_star.png');
+            });
+            $(".star-text").text(getStarShortTextDescription(selectedId));
         }
     }
 
@@ -45,11 +45,14 @@
     * Reset the vote panel
     */
     function resetStarContainer() {
-        var divs = $(".star-container div").slice(0, 5).each(function (item) {
-            $(this).find("img").attr("src", '/Content/images/empty_star.png');
-        });
-        $(".carousel-vote-title").text("Vote");
-        $(".star-text").text("");
+        var activeImage = $(".active img");
+        if (activeImage.data("vote") === null || activeImage.data("vote") === undefined) {
+            var divs = $(".star-container div").slice(0, 5).each(function (item) {
+                $(this).find("img").attr("src", '/Content/images/empty_star.png');
+            });
+            $(".carousel-vote-title").text("Vote");
+            $(".star-text").text("");
+        }
     }
 
     /* 
