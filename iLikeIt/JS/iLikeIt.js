@@ -85,14 +85,14 @@
     *  On error, we display an alert to the user and reset the vote panel
     */
     function registerVote(star) {
-        var votedImage = $(".active img");
+        var votedImage = $(".active img");        
         // If the user didn't vote yet, then we can register the vote
         if (votedImage.data("vote") === null || votedImage.data("vote") === undefined) {
             $(".carousel-vote-title").text("Submitting your vote...");
             $.ajax({
                 type: 'POST',
                 url: 'Home/RegisterVote',
-                data: '{"imageName":"' + votedImage.src + '", "star":"' + star.attr("id") + '"}',
+                data: '{"imageId":"' + votedImage.attr("id") + '", "rating":"' + star.attr("id") + '"}',
                 contentType: "application/json; charset=utf-8",
                 success: function (msg) {
                     votedImage.data("vote", msg);

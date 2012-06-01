@@ -17,7 +17,7 @@ namespace iLikeIt.Controllers
         }
 
         [HttpPost]
-        public JsonResult RegisterVote(string votedImage, string rating)
+        public JsonResult RegisterVote(string imageId, string rating)
         {
             /* Simulates some kind of computation */
             for (var i = 0; i < 100000000; i++)
