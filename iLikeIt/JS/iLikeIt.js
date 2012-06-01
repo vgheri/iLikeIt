@@ -124,10 +124,9 @@
     $.fn.iLikeIt = function (options) {
 
         var div = createVotingDiv();
-
+        // element is the carousel 
         var element = $(this);
-        element.append(div);
-        //$("#myCarousel").append(div);
+        element.append(div);        
 
         element.carousel({
             interval: false,
